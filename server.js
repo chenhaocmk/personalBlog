@@ -1,24 +1,15 @@
+const url = require("url");
+const express = require("express");
+const bodyParser = require("body-parser");
 
-var http = require("http");
-var url = require("url");
+const route = require("./route");
 
 function start(handle) {
-    function onRequest(request, response) {
-      var pathName = url.parse(request.url).pathname;
-      console.log("Request for " + pathName + " received.");
+    var app = express();
+    var jsonParser = bodyParser.json();
+    route.route(app, jsonParser, handle);
 
-      request.setEncoding("utf8");
-
-      if (pathName in handle) {
-        response.writeHead(200, {"Content-Type": "text/plain"});
-        response.write("Hello World");
-      } else {
-        response.writeHead(404, {"Content-Type": "text/plain"});
-        response.write("Not found!");
-      }
-      response.end();
-    }
-    http.createServer(onRequest).listen(8888);
+    app.listen(8888);
     console.log("Server has started.");
 }
 

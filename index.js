@@ -1,12 +1,28 @@
-var server = require("./server");
-var route = require("./route");
-var requestHandlers = require("./requestHandlers");
+const mongoose = require("mongoose");
 
-const API_PREFIX = "/";
-var handle = {};
+const server = require("./server");
+const route = require("./route");
+const requestHandlers = require("./requestHandlers");
 
-handle[API_PREFIX + 'blog_list'] = requestHandlers.getBlogs;
-// handle[API_PREFIX + 'blog'] = requestHandlers.getBlogDetail;
-// handle[API_PREFIX + '']
+const API_PREFIX = "/api/";
+
+// Request routing
+var handle = {
+  "GET": {},
+  "POST":{},
+  "PUT": {},
+  "DELETE": {},
+};
+
+handle["GET"][API_PREFIX + "blog"] = requestHandlers.getBlogs;
+handle["GET"][API_PREFIX + "blog/:blogId"] = requestHandlers.getBlogDetail;
+handle["POST"][API_PREFIX + "blog"] = requestHandlers.createBlog;
+handle["PUT"][API_PREFIX + "blog/:blogId"] = requestHandlers.updateBlog;
+handle["DELETE"][API_PREFIX + "blog/:blogId"] = requestHandlers.deleteBlog;
+
+// DB
+mongoose.connect("mongodb://localhost:27017/personalBlogDB");
+var db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 server.start(handle);
