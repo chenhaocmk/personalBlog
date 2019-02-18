@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 
 const server = require("./server");
 const route = require("./route");
-const requestHandlers = require("./requestHandlers");
+const apiRequestHandlers = require("./requestHandlers/apiReqeustHandlers");
+const pageReqeustHandlers = require("./requestHandlers/pageReqeustHandlers");
 
 const API_PREFIX = "/api/";
 
@@ -14,11 +15,17 @@ var handle = {
   "DELETE": {},
 };
 
-handle["GET"][API_PREFIX + "blog"] = requestHandlers.getBlogs;
-handle["GET"][API_PREFIX + "blog/:blogId"] = requestHandlers.getBlogDetail;
-handle["POST"][API_PREFIX + "blog"] = requestHandlers.createBlog;
-handle["PUT"][API_PREFIX + "blog/:blogId"] = requestHandlers.updateBlog;
-handle["DELETE"][API_PREFIX + "blog/:blogId"] = requestHandlers.deleteBlog;
+handle["GET"]['/'] = pageReqeustHandlers.getIndex;
+handle["GET"]['/create_blog'] = pageReqeustHandlers.getCreateBlog;
+handle["GET"]['/update_blog/:blogId'] = pageReqeustHandlers.getUpdateBlog;
+handle["GET"]['/blog/:blogId'] = pageReqeustHandlers.getBlog;
+handle["GET"]['/css'] = pageReqeustHandlers.getCSSTemplate;
+
+handle["GET"][API_PREFIX + "blog"] = apiRequestHandlers.getBlogs;
+handle["GET"][API_PREFIX + "blog/:blogId"] = apiRequestHandlers.getBlogDetail;
+handle["POST"][API_PREFIX + "blog"] = apiRequestHandlers.createBlog;
+handle["PUT"][API_PREFIX + "blog/:blogId"] = apiRequestHandlers.updateBlog;
+handle["DELETE"][API_PREFIX + "blog/:blogId"] = apiRequestHandlers.deleteBlog;
 
 // DB
 mongoose.connect("mongodb://localhost:27017/personalBlogDB");

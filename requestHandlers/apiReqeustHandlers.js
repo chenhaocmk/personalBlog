@@ -1,4 +1,4 @@
-const blog = require("./models/blog");
+const blog = require("../models/blog");
 
 function getBlogs(request, response) {
   blog.BlogModel.find()
@@ -44,11 +44,13 @@ function getBlogDetail(request, response) {
 }
 
 function createBlog(request, response) {
+  console.log(request.body);
+  now = Date.now();
   var blogInstance = new blog.BlogModel({
     subject: request.body.subject,
     content: request.body.content,
-    c_time: Date.now(),
-    m_time: Date.now(),
+    c_time: now,
+    m_time: now,
   });
   blogInstance.save(function(error) {
       if (error) {
@@ -59,7 +61,7 @@ function createBlog(request, response) {
       }
       else {
         response.writeHead(200, {"Content-Type": "application/json"});
-        response.write(JSON.stringify({"data": null}));
+        response.write(JSON.stringify({"data": {_id: blogInstance._id}}));
         response.end();
         console.log("Post blog successfully: " + blogInstance._id);
       }
@@ -121,7 +123,6 @@ function deleteBlog(request, response) {
     }
   );
 }
-
 
 exports.getBlogs = getBlogs;
 exports.getBlogDetail = getBlogDetail;

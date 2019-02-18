@@ -1,0 +1,36 @@
+.root {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+}
+
+.title {
+  width: 100%;
+  text-decoration: none;
+  background: #ffffff;
+  line-height: 3.0;
+}
+
+.body {
+  width: 100%;
+}
+
+.blogItem {
+  width: 100%;
+  background: #ffffff;
+  line-height: 1.8;
+}
+
+.blogSuject {
+  width: 100%;
+  background: #ffffff;
+}
+
+.blogContent {
+  width: 100%;
+  background: #ffffff;
+}
+
+.blogTime {
+  color: #c0c0c0;
+}

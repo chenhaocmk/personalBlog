@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+  <title>Personal Blog</title>
+  <link rel="stylesheet" href="/css">
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+  </script>
+  <script type="text/javascript">
+  const blogId = "{{id}}";
+
+  $(document).ready(function(){
+    $("#indexButton").click(function(){
+      window.location = "/";
+    });
+    $("#updateButton").click(function(){
+      window.location = "/update_blog/" + blogId;
+    });
+    $("#deleteButton").click(function(){
+      $.ajax("/api/blog/" + blogId, {
+        type: 'DELETE',
+      }).done(function() {
+          window.location = "/";
+      })
+    });
+    $.ajax("/api/blog/" + blogId, {
+      dataType: 'json'
+    }).done(function(data) {
+        $('#blogSubject').text(data.data.subject);
+        $('#blogContent').text(data.data.content);
+        let dateCreate = new Date(data.data.c_time);
+        let dateModify = new Date(data.data.m_time);
+        timeText = "Created on " + dateCreate.toISOString().split('T')[0] + ".";
+        if (!(dateCreate.getTime() == dateModify.getTime())) {
+          timeText += " Modified on " + dateCreate.toISOString().split('T')[0] + ".";
+        }
+        $('#blogTimeText').text(timeText);
+        console.log(dateCreate, dateModify);
+    })
+  });
+  </script>
+</head>
+<div class="root">
+  <div class="title">
+    <h1 class="title" id="blogSubject"></h1>
+    <div class="blogTime" id="blogTimeText">
+    </div>
+    <div>
+      <button type="button" id="indexButton">Back to Index</button>
+      <button type="button" id="updateButton">Edit</button>
+      <button type="button" id="deleteButton">Delete</button>
+    </div>
+  </div>
+  <div class="body">
+    <p id="blogContent"></p>
+  </div>
+</div>
