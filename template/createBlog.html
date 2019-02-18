@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+  <title>Create Blog</title>
+  <link rel="stylesheet" href="css">
+  <style>
+  .flex_container {
+    display: flex;
+  }
+  </style>
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#indexButton").click(function(){
+        window.location = "/";
+      });
+      $("#submitButton").click(function() {
+        $.ajax({
+						type: 'POST',
+						data: JSON.stringify(
+              {
+                subject: $("#blogCreateSubject").val(),
+                content: $("#blogCreateContent").val(),
+              }),
+		        contentType: 'application/json',
+            url: '/api/blog',
+            success: function(data) {
+                window.location = "/blog/" + data.data._id;
+            }
+        });
+      });
+    });
+  </script>
+</head>
+<div class="root">
+  <div class="title">
+    <h1 class="title">Personal Blog</h1>
+  </div>
+  <div class="body">
+    <div>
+      <p><b>Blog Subject</b> </br> <input type="text" size=100 id="blogCreateSubject"></p>
+    </div>
+      <p><b>Blog Content</b> </br> <textarea rows=40 cols=101 id="blogCreateContent"></textarea></p>
+    <div class="flex_container">
+      <button type="button" id="submitButton">Submit</button>
+      <button type="button" id="indexButton">Back to Index</button>
+    </div>
+  </div>
+</div>

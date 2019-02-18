@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<head>
+  <title>Create Blog</title>
+  <link rel="stylesheet" href="css">
+  <style>
+  .flex_container {
+    display: flex;
+  }
+  </style>
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+  </script>
+  <script type="text/javascript">
+    const blogId = "{{id}}";
+    var blogContent = null;
+
+    function setUpTextField() {
+      $("#blogUpdateSubject").val(blogContent.subject);
+      $("#blogUpdateContent").val(blogContent.content);
+    }
+
+    function backToBlog() {
+      window.location = "/blog/" + blogId;
+    }
+
+    $(document).ready(function() {
+      $.ajax("/api/blog/" + blogId, {
+        dataType: 'json'
+      }).done(function(data) {
+        blogContent = data.data;
+        setUpTextField();
+      });
+
+      $("#resetButton").click(setUpTextField);
+      $("#backToBlogButton").click(backToBlog);
+      $("#submitButton").click(function() {
+        $.ajax({
+						type: 'PUT',
+						data: JSON.stringify(
+              {
+                subject: $("#blogUpdateSubject").val(),
+                content: $("#blogUpdateContent").val(),
+              }),
+		        contentType: 'application/json',
+            url: '/api/blog/' + blogId,
+            success: backToBlog,
+        });
+      });
+    });
+  </script>
+</head>
+<div class="root">
+  <div class="title">
+    <h1 class="title">Personal Blog</h1>
+  </div>
+  <div class="body">
+    <div>
+      <p><b>Blog Subject</b> </br> <input type="text" size=100 id="blogUpdateSubject"></p>
+    </div>
+      <p><b>Blog Content</b> </br> <textarea rows=40 cols=101 id="blogUpdateContent"></textarea></p>
+    <div class="flex_container">
+      <button type="button" id="resetButton">Reset</button>
+      <button type="button" id="submitButton">Submit</button>
+      <button type="button" id="backToBlogButton">Back to Blog</button>
+    </div>
+  </div>
+</div>
